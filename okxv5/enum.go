@@ -6,6 +6,6 @@ const (
 	Spot    Category = "SPOT"
 	Margin  Category = "MARGIN"
 	Swap    Category = "SWAP"
-	Futures Category = "Futures"
-	Option  Category = "Option"
+	Futures Category = "FUTURES"
+	Option  Category = "OPTION"
 )

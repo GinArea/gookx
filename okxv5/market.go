@@ -1,6 +1,10 @@
 package okxv5
 
-import "github.com/msw-x/moon/ujson"
+import (
+	"strings"
+
+	"github.com/msw-x/moon/ujson"
+)
 
 // Get instruments
 // Retrieve a list of instruments with open contracts.
@@ -42,4 +46,24 @@ type Instruments struct {
 	Stk          string
 	TickSz       ujson.Float64
 	Uly          string
+}
+
+func (o *Client) GetInstruments() Response[[]Instruments] {
+	return GetInstruments{
+		InstType: Margin,
+	}.Do(o)
+}
+
+func (o GetInstruments) Do(c *Client) Response[[]Instruments] {
+	return GetPub(c.public(), "instruments", o, forward[[]Instruments])
+}
+
+func (o *Client) GetInstrument(market string) Response[[]Instruments] {
+
+	instId := strings.Replace(market, "USDT", "", -1) + "-USDT"
+
+	return GetInstruments{
+		InstType: Margin,
+		InstId:   instId,
+	}.Do(o)
 }
