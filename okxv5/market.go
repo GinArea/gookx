@@ -1,8 +1,6 @@
 package okxv5
 
 import (
-	"strings"
-
 	"github.com/msw-x/moon/ujson"
 )
 
@@ -10,7 +8,7 @@ import (
 // Retrieve a list of instruments with open contracts.
 // https://www.okx.com/docs-v5/en/#public-data-rest-api-get-instruments
 
-type GetInstruments struct {
+type InstrumentsQuery struct {
 	InstType   Category
 	Uly        string `url:",omitempty"`
 	InstFamily string `url:",omitempty"`
@@ -48,22 +46,63 @@ type Instruments struct {
 	Uly          string
 }
 
-func (o *Client) GetInstruments() Response[[]Instruments] {
-	return GetInstruments{
-		InstType: Margin,
-	}.Do(o)
+func (o *Client) GetInstruments(i InstrumentsQuery) Response[[]Instruments] {
+	return i.Do(o)
 }
 
-func (o GetInstruments) Do(c *Client) Response[[]Instruments] {
+func (o InstrumentsQuery) Do(c *Client) Response[[]Instruments] {
 	return GetPub(c.public(), "instruments", o, forward[[]Instruments])
 }
 
-func (o *Client) GetInstrument(market string) Response[[]Instruments] {
+// GET / Tickers (!!! not applicable for Margin)
+// Retrieve the latest price snapshot, best bid/ask price, and trading volume in the last 24 hours.
+// https://www.okx.com/docs-v5/en/#order-book-trading-market-data-get-tickers
 
-	instId := strings.Replace(market, "USDT", "", -1) + "-USDT"
+type MarketsQuery struct {
+	InstType   Category //exclude Margin
+	Uly        string   `url:",omitempty"`
+	InstFamily string   `url:",omitempty"`
+}
 
-	return GetInstruments{
-		InstType: Margin,
-		InstId:   instId,
-	}.Do(o)
+// GET / Ticker (!!! not applicable for Margin)
+// Retrieve the latest price snapshot, best bid/ask price, and trading volume in the last 24 hours.
+// https://www.okx.com/docs-v5/en/#order-book-trading-market-data-get-ticker
+
+type MarketQuery struct {
+	InstId string
+}
+
+type Market struct {
+	InstType  string
+	InstId    string
+	Last      ujson.Float64
+	LastSz    ujson.Float64
+	AskPx     ujson.Float64
+	AskSz     ujson.Float64
+	BidPx     ujson.Float64
+	BidSz     ujson.Float64
+	Open24h   ujson.Float64
+	High24h   ujson.Float64
+	Low24h    ujson.Float64
+	VolCcy24h ujson.Float64
+	Vol24h    ujson.Float64
+	Ts        ujson.Int64
+	SodUtc0   ujson.Float64
+	SodUtc8   ujson.Float64
+}
+
+func (o *Client) GetMarkets(mq MarketsQuery) Response[[]Market] {
+	return mq.Do(o)
+}
+
+func (mq MarketsQuery) Do(c *Client) Response[[]Market] {
+	return GetPub(c.market(), "tickers", mq, forward[[]Market])
+}
+
+func (o *Client) GetMarket(mq MarketQuery) Response[[]Market] {
+	return mq.Do(o)
+}
+
+func (mq MarketQuery) Do(c *Client) Response[[]Market] {
+	return GetPub(c.market(), "ticker", mq, forward[[]Market])
 }

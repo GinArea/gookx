@@ -73,4 +73,8 @@ func (o *Client) public() *Client {
 	return o.Clone().WithAppendPath("public")
 }
 
+func (o *Client) market() *Client {
+	return o.Clone().WithAppendPath("market")
+}
+
 type OnNetError func(err error, statusCode int, attempt int) bool
