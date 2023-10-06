@@ -9,3 +9,10 @@ const (
 	Futures Category = "FUTURES"
 	Option  Category = "OPTION"
 )
+
+type MarginMode string
+
+const (
+	Cross    MarginMode = "cross"
+	Isolated MarginMode = "isolated"
+)

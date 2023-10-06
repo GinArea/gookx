@@ -54,7 +54,7 @@ func (o InstrumentsQuery) Do(c *Client) Response[[]Instruments] {
 	return GetPub(c.public(), "instruments", o, forward[[]Instruments])
 }
 
-// GET / Tickers (!!! not applicable for Margin)
+// GET / Tickers
 // Retrieve the latest price snapshot, best bid/ask price, and trading volume in the last 24 hours.
 // https://www.okx.com/docs-v5/en/#order-book-trading-market-data-get-tickers
 
@@ -64,7 +64,7 @@ type MarketsQuery struct {
 	InstFamily string   `url:",omitempty"`
 }
 
-// GET / Ticker (!!! not applicable for Margin)
+// GET / Ticker
 // Retrieve the latest price snapshot, best bid/ask price, and trading volume in the last 24 hours.
 // https://www.okx.com/docs-v5/en/#order-book-trading-market-data-get-ticker
 
