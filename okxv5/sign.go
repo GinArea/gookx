@@ -29,6 +29,10 @@ func NewSign(key, secret, password string) *Sign {
 	return o
 }
 
+func (o *Sign) HeaderPost(h http.Header, body []byte, path string) {
+	o.header(h, string(body[:]), path, "POST")
+}
+
 func (o *Sign) HeaderGet(h http.Header, v url.Values, path string) {
 	encodedParams := encodeSortParams(v)
 	o.header(h, encodedParams, path, "GET")
@@ -85,12 +89,6 @@ func (o *Sign) header(h http.Header, s string, path string, method string) {
 	h.Set("OK-ACCESS-PASSPHRASE", o.Password)
 	h.Set("OK-ACCESS-TIMESTAMP", ts)
 	h.Set("OK-ACCESS-SIGN", kcApiSign)
-}
-
-func (o *Sign) HeaderPost(h http.Header, body []byte) {
-	//TODO
-
-	//o.header(h, )
 }
 
 func signHmac(preSignedString, secret string) string {

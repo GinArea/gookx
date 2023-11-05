@@ -13,7 +13,10 @@ type Response[T any] struct {
 type response[T any] struct {
 	Code ujson.Int64
 	Data T
-	Msg  string
+	// InTime + OutTime are contained in PlaceOrder, but not in GetPositions
+	// InTime  ujson.Int64
+	// OutTime ujson.Int64
+	Msg string
 }
 
 func (o *Response[T]) Ok() bool {

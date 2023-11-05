@@ -20,7 +20,8 @@ func (o *Error) Std() error {
 }
 
 func (o *Error) Empty() bool {
-	return o.Code == 0
+	// 1 added, as PlaceOrder response contains info inside
+	return o.Code == 0 || o.Code == 1
 }
 
 func (o *Error) Error() string {
