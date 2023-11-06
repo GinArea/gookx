@@ -13,13 +13,11 @@ type PositionsQuery struct {
 }
 
 type Positions struct {
-	InstType Category
-	MgnMode  MarginMode
-	PosId    ujson.Int64
-	PosSide  string
-	Pos      ujson.Float64
-	//BaseBal // TODO -> check in response
-	//QuoteBal // TODO -> check in response
+	InstType       Category
+	MgnMode        MarginMode
+	PosId          ujson.Int64
+	PosSide        string
+	Pos            ujson.Float64
 	BaseBorrowed   string
 	BaseInterest   string
 	QuoteBorrowed  string

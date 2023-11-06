@@ -44,3 +44,41 @@ const (
 	Mmp             OrderType = "mmp"
 	MmpAndPostOnly  OrderType = "mmp_and_post_only"
 )
+
+type OrderState string
+
+const (
+	Canceled        OrderState = "canceled"
+	Live            OrderState = "live"
+	PartiallyFilled OrderState = "partially_filled"
+	Filled          OrderState = "filled"
+	MmpCanceled     OrderState = "mmp_canceled"
+)
+
+type TriggerPriceType string
+
+const (
+	Last  TriggerPriceType = "last"
+	Index TriggerPriceType = "index"
+	Mark  TriggerPriceType = "mark"
+)
+
+type OrderCategory string
+
+const (
+	Normal             OrderCategory = "normal"
+	Twap               OrderCategory = "twap"
+	Adl                OrderCategory = "adl"
+	FullLiquidation    OrderCategory = "full_liquidation"
+	PartialLiquidation OrderCategory = "partial_liquidation"
+	Delivery           OrderCategory = "delivery"
+	Ddh                OrderCategory = "ddh" //Delta dynamic hedge
+)
+
+type MarginType string
+
+const (
+	Manual     MarginType = "manual"
+	AutoBorrow MarginType = "auto_borrow"
+	AutoRepay  MarginType = "auto_repay"
+)
