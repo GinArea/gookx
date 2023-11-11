@@ -82,3 +82,16 @@ const (
 	AutoBorrow MarginType = "auto_borrow"
 	AutoRepay  MarginType = "auto_repay"
 )
+
+// https://www.okx.com/docs-v5/en/#order-book-trading-market-data-ws-order-book-channel
+
+type OrderbookType string
+
+const (
+	Books  OrderbookType = "books"
+	Books5 OrderbookType = "books5"
+	Bbotbt OrderbookType = "bbo-tbt"
+	//Log in required:
+	//Booksl2tbt   OrderbookType = "books-l2-tbt"
+	//Books50l2tbt OrderbookType = "books50-l2-tbt"
+)

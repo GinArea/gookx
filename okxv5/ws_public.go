@@ -93,6 +93,6 @@ func (o *WsPublic) onTopic(data []byte) error {
 	return o.subscriptions.processTopic(data)
 }
 
-func (o *WsPublic) OrderBook(symbol string) *Executor[[]Orderbook] {
-	return NewExecutor[[]Orderbook](symbol, "bbo-tbt", o.subscriptions)
+func (o *WsPublic) OrderBook(symbol string, bookType OrderbookType) *Executor[[]Orderbook] {
+	return NewExecutor[[]Orderbook](symbol, string(bookType), o.subscriptions)
 }
