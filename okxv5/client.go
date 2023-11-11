@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/msw-x/moon/uhttp"
-	"github.com/msw-x/moon/ulog"
 )
 
 type Client struct {
@@ -26,19 +25,14 @@ func (o *Client) WithTimeout(timeout time.Duration) *Client {
 	return o
 }
 
-func (o *Client) WithTraceFormat(log *ulog.Log, f uhttp.Format) *Client {
-	o.c.WithTraceFormat(log, f)
-	return o
-}
-
 func (o *Client) WithProxy(proxy string) *Client {
 	o.c.WithProxy(proxy)
 	return o
 }
 
-func (o *Client) Clone() *Client {
+func (o *Client) Copy() *Client {
 	r := new(Client)
-	r.c = o.c.Clone()
+	r.c = o.c.Copy()
 	r.s = o.s
 	r.onNetError = o.onNetError
 	return r
@@ -70,11 +64,11 @@ func (o *Client) WithOnNetError(f OnNetError) *Client {
 }
 
 func (o *Client) public() *Client {
-	return o.Clone().WithAppendPath("public")
+	return o.Copy().WithAppendPath("public")
 }
 
 func (o *Client) market() *Client {
-	return o.Clone().WithAppendPath("market")
+	return o.Copy().WithAppendPath("market")
 }
 
 type OnNetError func(err error, statusCode int, attempt int) bool

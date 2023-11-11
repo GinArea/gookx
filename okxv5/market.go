@@ -106,3 +106,11 @@ func (o *Client) GetMarket(mq MarketQuery) Response[[]Market] {
 func (mq MarketQuery) Do(c *Client) Response[[]Market] {
 	return GetPub(c.market(), "ticker", mq, forward[[]Market])
 }
+
+// struct for websocket orderbook
+type Orderbook struct {
+	Asks  [][]ujson.Float64 `json:"asks"`
+	Bids  [][]ujson.Float64 `json:"bids"`
+	Ts    ujson.Int64       `json:"ts"`
+	SeqId ujson.Int64       `json:"seqId"`
+}
