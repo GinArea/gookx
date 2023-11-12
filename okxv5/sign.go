@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 	"sort"
+	"strconv"
 	"time"
 )
 
@@ -96,4 +97,21 @@ func signHmac(preSignedString, secret string) string {
 	h := hmac.New(sha256.New, []byte(secret))
 	io.WriteString(h, preSignedString)
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+}
+
+func (o *Sign) WebSocket() []SubscriptionArgsAuth {
+	timestamp := strconv.Itoa(nowUtcMs())
+	preSignedString := timestamp + "GET" + "/users/self/verify"
+	kcApiSign := signHmac(preSignedString, o.Secret)
+	auth := SubscriptionArgsAuth{
+		ApiKey:    o.Key,
+		Passprase: o.Password,
+		Timestamp: timestamp,
+		Sign:      kcApiSign,
+	}
+	return []SubscriptionArgsAuth{auth}
+}
+
+func nowUtcMs() int {
+	return int(time.Now().UTC().Unix())
 }

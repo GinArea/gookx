@@ -11,10 +11,9 @@ import (
 )
 
 type WsClient struct {
-	c              *uws.Client
-	onConnected    func()
-	onDisconnected func()
-	onTopic        func([]byte) error
+	c          *uws.Client
+	onResponce func(WsResponse) error
+	onTopic    func([]byte) error
 }
 
 func NewWsClient() *WsClient {
@@ -77,6 +76,11 @@ func (o *WsClient) WithOnDisconnected(f func()) *WsClient {
 	return o
 }
 
+func (o *WsClient) WithOnResponse(f func(WsResponse) error) *WsClient {
+	o.onResponce = f
+	return o
+}
+
 func (o *WsClient) WithOnTopic(f func([]byte) error) *WsClient {
 	o.onTopic = f
 	return o
@@ -92,22 +96,20 @@ func (o *WsClient) Connected() bool {
 	return o.c.Connected()
 }
 
-func (o *WsClient) Send(r WsRequest) {
+func (o *WsClient) Send(r any) {
 	o.c.SendJson(r)
 }
 
 func (o *WsClient) Subscribe(args SubscriptionArgs) {
 
-	//TODO
-	o.Send(WsRequest{
+	req := WsRequest{
 		Operation: "subscribe",
 		Args:      []SubscriptionArgs{args},
-	})
+	}
+	o.Send(req)
 }
 
 func (o *WsClient) Unsubscribe(args SubscriptionArgs) {
-
-	//TODO
 	o.Send(WsRequest{
 		Operation: "unsubscribe",
 		Args:      []SubscriptionArgs{args},
@@ -131,13 +133,27 @@ func (o *WsClient) onMessage(messageType int, data []byte) {
 
 	var r WsResponse
 	err := json.Unmarshal(data, &r)
+
 	if err == nil {
-		//TODO login ??
-		skipTypes := []string{"login", "subscribe", "unsubscribe"}
-		if o.onTopic != nil && !slices.Contains(skipTypes, r.Event) {
-			_ = o.onTopic(data)
+		if r.isError() {
+			out, e := json.Marshal(r)
+			if e == nil {
+				log.Error(string(out))
+			}
+		} else {
+			if r.Valid() {
+				if o.onResponce != nil {
+					err = o.onResponce(r)
+				}
+			} else {
+				skipTypes := []string{"subscribe", "unsubscribe"}
+				if o.onTopic != nil && !slices.Contains(skipTypes, r.Event) {
+					_ = o.onTopic(data)
+				}
+			}
 		}
-	} else {
+	}
+	if err != nil {
 		log.Error(err)
 	}
 

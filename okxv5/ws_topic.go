@@ -1,6 +1,10 @@
 package okxv5
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/msw-x/moon/ujson"
+)
 
 type Topic[T any] struct {
 	Arg    SubscriptionArgs
@@ -16,3 +20,7 @@ func UnmarshalRawTopic[T any](raw RawTopic) (ret Topic[T], err error) {
 }
 
 type RawTopic Topic[json.RawMessage]
+
+type WalletShot struct {
+	PTime ujson.Int64
+}

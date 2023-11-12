@@ -1,6 +1,8 @@
 package okxv5
 
 import (
+	"strings"
+
 	"github.com/msw-x/moon/ulog"
 )
 
@@ -11,6 +13,14 @@ type WsResponse struct {
 	Message      string        `json:"msg"`
 	ConnectionId string        `json:"connId"`
 	Args         []interface{} `json:"args"`
+}
+
+func (o WsResponse) Valid() bool {
+	return o.Code != ""
+}
+
+func (o WsResponse) isError() bool {
+	return strings.EqualFold(o.Event, "error")
 }
 
 func (o WsResponse) Log(log *ulog.Log) {

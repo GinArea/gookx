@@ -83,7 +83,7 @@ type RetrievedOrderDetails struct {
 	Source             string
 	Rebate             string
 	Category           OrderCategory
-	ReduceOnly         bool
+	ReduceOnly         ujson.Bool
 	CancelSource       string
 	CancelSourceReason string
 	QuickMgnType       MarginType

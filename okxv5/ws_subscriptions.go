@@ -64,7 +64,9 @@ func (o *Subscriptions) getFunc(passedArgs SubscriptionArgs) (f SubscriptionFunc
 	o.mutex.Lock()
 	defer o.mutex.Unlock()
 	for args, fn := range o.funcs {
-		if strings.EqualFold(args.Channel, passedArgs.Channel) && strings.EqualFold(args.InstId, passedArgs.InstId) {
+		if strings.EqualFold(args.Channel, passedArgs.Channel) &&
+			strings.EqualFold(args.InstId, passedArgs.InstId) &&
+			strings.EqualFold(args.InstType, passedArgs.InstType) {
 			f = fn
 			break
 		}

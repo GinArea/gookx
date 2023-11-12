@@ -62,6 +62,7 @@ func req[R, T any](c *Client, method string, path string, request any, transform
 		//skip checking http statuses like kucoin
 		//if h.StatusCode = http.StatusOK || ...
 		if h.BodyExists() {
+			//fmt.Print(string(h.Body) + "\n\n")
 			raw := new(response[R])
 			h.Json(raw)
 			r.Error = raw.Error()

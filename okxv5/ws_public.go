@@ -69,6 +69,7 @@ func (o *WsPublic) Run() {
 		}
 		o.subscriptions.subscribeAll()
 	})
+	o.c.WithOnResponse(o.onResponse)
 	o.c.WithOnTopic(o.onTopic)
 	o.c.Run()
 }
@@ -89,10 +90,20 @@ func (o *WsPublic) unsubscribe(topicArgs SubscriptionArgs) {
 	o.c.Unsubscribe(topicArgs)
 }
 
+func (o *WsPublic) onResponse(r WsResponse) error {
+	r.Log(o.c.Log())
+	return nil
+}
+
 func (o *WsPublic) onTopic(data []byte) error {
 	return o.subscriptions.processTopic(data)
 }
 
 func (o *WsPublic) OrderBook(symbol string, bookType OrderbookType) *Executor[[]Orderbook] {
-	return NewExecutor[[]Orderbook](symbol, string(bookType), o.subscriptions)
+
+	args := SubscriptionArgs{
+		Channel: string(bookType),
+		InstId:  symbol,
+	}
+	return NewExecutor[[]Orderbook](args, o.subscriptions)
 }
