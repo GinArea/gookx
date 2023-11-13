@@ -21,7 +21,7 @@ type Instruments struct {
 	Category     ujson.Int64
 	CtMult       string
 	CtType       string
-	CtVal        string
+	CtVal        ujson.Float64
 	CtValCcy     string
 	ExpTime      string
 	InstFamily   string
