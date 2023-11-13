@@ -1,6 +1,7 @@
 package okxv5
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/msw-x/moon/uhttp"
@@ -32,6 +33,11 @@ func (o *Client) WithTrace(trace func(uhttp.Responce)) *Client {
 
 func (o *Client) WithProxy(proxy string) *Client {
 	o.c.WithProxy(proxy)
+	return o
+}
+
+func (o *Client) WithTransport(transport *http.Transport) *Client {
+	o.c.WithTransport(transport)
 	return o
 }
 
