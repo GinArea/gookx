@@ -25,6 +25,11 @@ func (o *Client) WithTimeout(timeout time.Duration) *Client {
 	return o
 }
 
+func (o *Client) WithTrace(trace func(uhttp.Responce)) *Client {
+	o.c.WithTrace(trace)
+	return o
+}
+
 func (o *Client) WithProxy(proxy string) *Client {
 	o.c.WithProxy(proxy)
 	return o
