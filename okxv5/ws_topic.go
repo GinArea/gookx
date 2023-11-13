@@ -22,5 +22,82 @@ func UnmarshalRawTopic[T any](raw RawTopic) (ret Topic[T], err error) {
 type RawTopic Topic[json.RawMessage]
 
 type WalletShot struct {
-	PTime ujson.Int64
+	PTime     ujson.Int64
+	EventType string
+	BalData   []BalanceData
+	PosData   []PositionData
+	Trades    []Trades
 }
+
+type BalanceData struct {
+	CashBal ujson.Float64
+	Ccy     string
+	UTime   ujson.Int64
+}
+
+type PositionData struct {
+	AvgPx    ujson.Float64
+	BaseDeal string
+	Ccy      string
+	InstId   string
+	InstType string
+	MgnMode  string
+	Pos      ujson.Float64
+	PosCcy   string
+	PosId    ujson.Int64
+	PosSide  string
+	QuoteBal ujson.Float64
+	TradeId  ujson.Int64
+	UTime    ujson.Int64
+}
+
+type Trades struct {
+	InstId  string
+	TradeId ujson.Int64
+}
+
+/*
+{
+   "Arg":{
+      "channel":"balance_and_position"
+   },
+   "Action":"",
+   "Data":[
+      {
+         "balData":[
+            {
+               "cashBal":"44.6662370515664886",
+               "ccy":"USDT",
+               "uTime":"1699789825443"
+            }
+         ],
+         "eventType":"filled",
+         "pTime":"1699789825442",
+         "posData":[
+            {
+               "avgPx":"88.42",
+               "baseBal":"",
+               "ccy":"USDT",
+               "instId":"TRB-USDT-SWAP",
+               "instType":"SWAP",
+               "mgnMode":"cross",
+               "pos":"1",
+               "posCcy":"",
+               "posId":"624362342386012199",
+               "posSide":"net",
+               "quoteBal":"",
+               "tradeId":"143360323",
+               "uTime":"1699789825443"
+            }
+         ],
+         "trades":[
+            {
+               "instId":"TRB-USDT-SWAP",
+               "tradeId":"143360323"
+            }
+         ]
+      }
+   ]
+}
+
+*/

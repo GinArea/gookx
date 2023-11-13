@@ -154,6 +154,7 @@ func (o *WsPrivate) Orders(c Category) *Executor[[]RetrievedOrderDetails] {
 	return NewExecutor[[]RetrievedOrderDetails](args, o.subscriptions)
 }
 
+// https://www.okx.com/docs-v5/en/#trading-account-websocket-balance-and-position-channel
 func (o *WsPrivate) Wallet() *Executor[[]WalletShot] {
 	args := SubscriptionArgs{
 		Channel: "balance_and_position",
