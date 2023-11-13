@@ -7,9 +7,9 @@ import (
 )
 
 type Client struct {
-	c          *uhttp.Client
-	s          *Sign
-	onNetError OnNetError
+	c                *uhttp.Client
+	s                *Sign
+	onTransportError OnTransportError
 }
 
 func NewClient() *Client {
@@ -39,7 +39,7 @@ func (o *Client) Copy() *Client {
 	r := new(Client)
 	r.c = o.c.Copy()
 	r.s = o.s
-	r.onNetError = o.onNetError
+	r.onTransportError = o.onTransportError
 	return r
 }
 
@@ -63,8 +63,13 @@ func (o *Client) WithAuth(key, secret, password string) *Client {
 	return o
 }
 
-func (o *Client) WithOnNetError(f OnNetError) *Client {
-	o.onNetError = f
+func (o *Client) WithOnReadBodyError(f uhttp.OnError) *Client {
+	o.c.WithOnReadBodyError(f)
+	return o
+}
+
+func (o *Client) WithOnTransportError(f OnTransportError) *Client {
+	o.onTransportError = f
 	return o
 }
 
@@ -76,4 +81,4 @@ func (o *Client) market() *Client {
 	return o.Copy().WithAppendPath("market")
 }
 
-type OnNetError func(err error, statusCode int, attempt int) bool
+type OnTransportError func(err error, statusCode int, attempt int) bool
