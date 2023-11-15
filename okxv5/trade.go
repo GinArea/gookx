@@ -9,7 +9,7 @@ type PlaceOrder struct {
 	TdMode     TradeMode
 	Side       Side
 	OrdType    OrderType
-	Sz         ujson.Float64
+	Sz         float64
 	ClOrdId    string `json:",omitempty"`
 	ReduceOnly bool   `json:",omitempty"`
 	Tag        string `json:",omitempty"`

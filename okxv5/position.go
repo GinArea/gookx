@@ -55,7 +55,6 @@ type Positions struct {
 	LiqPenalty     ujson.Float64
 	CTime          ujson.TimeMs
 	UTime          ujson.TimeMs
-	PTime          ujson.TimeMs
 }
 
 func (o *Client) GetPositions(pq PositionsQuery) Response[[]Positions] {
