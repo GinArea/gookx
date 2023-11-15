@@ -59,7 +59,7 @@ type RetrievedOrderDetails struct {
 	Pnl                ujson.Float64
 	OrdType            OrderType
 	Side               Side
-	PosSide            string
+	PosSide            PosSide
 	TdMode             TradeMode
 	AccFillSz          ujson.Float64
 	FillPx             ujson.Float64
