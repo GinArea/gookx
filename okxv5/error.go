@@ -49,9 +49,15 @@ func (o *Error) ApiKeyInvalid() bool {
 // 	return o.Code ==
 // }
 
-// func (o *Error) TooManyVisits() bool {
-// 	return o.Code ==
-// }
+func (o *Error) TooManyVisits() bool {
+	codes := []ujson.Int64{
+		50011, // Requests too frequent
+		50013, // Systems are busy. Please try again later.
+		51113, // Market-price liquidation requests too frequent.
+		58102, // Rate limit reached. Please refer to API docs and throttle requests accordingly.
+	}
+	return slices.Contains(codes, o.Code)
+}
 
 func (o *Error) UnmatchedIp() bool {
 	return o.Code == 50110
