@@ -95,3 +95,31 @@ const (
 	//Booksl2tbt   OrderbookType = "books-l2-tbt"
 	//Books50l2tbt OrderbookType = "books50-l2-tbt"
 )
+
+type ContractIsolatedMarginTradingSettings string
+
+const (
+	Auto    ContractIsolatedMarginTradingSettings = "automatic"
+	Manualy ContractIsolatedMarginTradingSettings = "autonomy"
+)
+
+type GreekType string
+
+const (
+	Pa GreekType = "PA"
+	Bs GreekType = "BS"
+)
+
+type MgnIsoMode string
+
+const (
+	Automatic   MgnIsoMode = "automatic"
+	QuickMargin MgnIsoMode = "quick_margin"
+)
+
+type PositionMode string
+
+const (
+	LongShortMode PositionMode = "long_short_mode"
+	NetMode       PositionMode = "net_mode"
+)
