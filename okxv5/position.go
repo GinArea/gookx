@@ -16,7 +16,7 @@ type Positions struct {
 	InstType       Category
 	MgnMode        MarginMode
 	PosId          ujson.Int64
-	PosSide        string
+	PosSide        PosSide
 	Pos            ujson.Float64
 	BaseBorrowed   string
 	BaseInterest   string

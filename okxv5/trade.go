@@ -10,9 +10,10 @@ type PlaceOrder struct {
 	Side       Side
 	OrdType    OrderType
 	Sz         float64
-	ClOrdId    string `json:",omitempty"`
-	ReduceOnly bool   `json:",omitempty"`
-	Tag        string `json:",omitempty"`
+	PosSide    PosSide `json:",omitempty"`
+	ClOrdId    string  `json:",omitempty"`
+	ReduceOnly *bool   `json:",omitempty"`
+	Tag        string  `json:",omitempty"`
 }
 
 type OrderDetail struct {

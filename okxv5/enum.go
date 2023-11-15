@@ -32,6 +32,14 @@ const (
 	Sell Side = "sell"
 )
 
+type PosSide string
+
+const (
+	LongSide  PosSide = "long"
+	ShortSide PosSide = "short"
+	NetSide   PosSide = "net"
+)
+
 type OrderType string
 
 const (
