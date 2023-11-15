@@ -37,9 +37,10 @@ func (o *Error) ApiKeyInvalid() bool {
 	codes := []ujson.Int64{
 		50100, // API frozen, please contact customer service.
 		50101, // APIKey does not match current environment.
+		50105, // Request header "OK-ACCESS-PASSPHRASE" incorrect.
 		50111, // Invalid OK-ACCESS-KEY.
+		50113, // Invalid Sign
 		50119, // API key doesn't exist
-
 	}
 	return slices.Contains(codes, o.Code)
 }
