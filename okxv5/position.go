@@ -53,6 +53,9 @@ type Positions struct {
 	Fee            ujson.Float64
 	FundingFee     ujson.Float64
 	LiqPenalty     ujson.Float64
+	CTime          ujson.TimeMs
+	UTime          ujson.TimeMs
+	PTime          ujson.TimeMs
 }
 
 func (o *Client) GetPositions(pq PositionsQuery) Response[[]Positions] {
