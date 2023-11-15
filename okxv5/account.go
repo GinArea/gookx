@@ -20,7 +20,7 @@ type BalanceOverview struct {
 	NotionalUsd ujson.Float64
 	OrdFroz     ujson.Float64
 	TotalEq     ujson.Float64
-	UTime       ujson.Int64
+	UTime       ujson.TimeMs
 }
 
 type BalanceDetails struct {
@@ -48,9 +48,9 @@ type BalanceDetails struct {
 	SpotIsoBal    ujson.Float64
 	StgyEq        ujson.Float64
 	Twap          ujson.Float64
-	UTime         ujson.Int64
 	Upl           ujson.Float64
 	UplLiab       ujson.Float64
+	UTime         ujson.TimeMs
 }
 
 func (o *Client) GetBalance(v GetBalance) Response[[]BalanceOverview] {

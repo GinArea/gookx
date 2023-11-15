@@ -90,8 +90,8 @@ type RetrievedOrderDetails struct {
 	QuickMgnType       MarginType
 	AlgoClOrdId        string
 	AlgoId             string
-	UTime              ujson.Int64
-	CTime              ujson.Int64
+	UTime              ujson.TimeMs
+	CTime              ujson.TimeMs
 }
 
 func (o *Client) GetOrderDetails(v GetOrderDetails) Response[[]RetrievedOrderDetails] {
