@@ -108,6 +108,7 @@ func (mq MarketQuery) Do(c *Client) Response[[]Market] {
 }
 
 // struct for websocket orderbook
+// https://www.okx.com/docs-v5/en/#order-book-trading-market-data-ws-order-book-channel
 type Orderbook struct {
 	Asks  [][]ujson.Float64 `json:"asks"`
 	Bids  [][]ujson.Float64 `json:"bids"`

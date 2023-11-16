@@ -140,8 +140,9 @@ func (o *WsPrivate) onTopic(data []byte) error {
 
 func (o *WsPrivate) Position(c Category) *Executor[[]Positions] {
 	args := SubscriptionArgs{
-		Channel:  "positions",
-		InstType: string(c),
+		Channel:     "positions",
+		InstType:    string(c),
+		ExtraParams: "{\"updateInterval\": \"0\"}",
 	}
 	return NewExecutor[[]Positions](args, o.subscriptions)
 }

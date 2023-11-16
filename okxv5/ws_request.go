@@ -6,9 +6,10 @@ type WsRequest struct {
 }
 
 type SubscriptionArgs struct {
-	Channel  string `json:"channel"`
-	InstId   string `json:"instId,omitempty"`
-	InstType string `json:"instType,omitempty"`
+	Channel     string `json:"channel"`
+	InstId      string `json:"instId,omitempty"`
+	InstType    string `json:"instType,omitempty"`
+	ExtraParams string `json:"extraParams,omitempty"`
 }
 
 type WsRequestAuth struct {
