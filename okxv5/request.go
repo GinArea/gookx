@@ -59,10 +59,9 @@ func req[R, T any](c *Client, method string, path string, request any, transform
 	h := perf.Do()
 	if h.Error == nil {
 		r.StatusCode = h.StatusCode
-		//skip checking http statuses like kucoin
-		//if h.StatusCode = http.StatusOK || ...
+		// purposefully do not filter by any errors, because according to the documentation, the exchange can return a variety of server responses
+		// if h.StatusCode = http.StatusOK || ...
 		if h.BodyExists() {
-			//fmt.Print(string(h.Body) + "\n\n")
 			raw := new(response[R])
 			h.Json(raw)
 			r.Error = raw.Error()
