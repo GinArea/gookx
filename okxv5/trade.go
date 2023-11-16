@@ -20,7 +20,7 @@ type OrderDetail struct {
 	ClOrdId string
 	OrdId   string
 	Tag     string
-	SCode   string
+	SCode   ujson.Int64
 	SMsg    string
 }
 
