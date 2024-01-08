@@ -28,8 +28,8 @@ type AccountConf struct {
 	MainUid        string
 }
 
-func (o *Client) GetAccountConfiguration(v GetAccountConf) Response[[]AccountConf] {
-	return v.Do(o)
+func (o *Client) GetAccountConfiguration() Response[[]AccountConf] {
+	return GetAccountConf{}.Do(o)
 }
 
 func (o GetAccountConf) Do(c *Client) Response[[]AccountConf] {
