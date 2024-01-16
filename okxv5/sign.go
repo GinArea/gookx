@@ -12,10 +12,6 @@ import (
 	"time"
 )
 
-const (
-	tag = "557f6da2e9c0BCDE"
-)
-
 type Sign struct {
 	Key      string
 	Secret   string
