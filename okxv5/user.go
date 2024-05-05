@@ -8,24 +8,25 @@ import "github.com/msw-x/moon/ujson"
 type GetAccountConf struct{}
 
 type AccountConf struct {
+	Uid            string
+	MainUid        string
 	AcctLv         ujson.Int64
+	AcctStpMode    string
+	PosMode        PositionMode
 	AutoLoan       ujson.Bool
-	CtIsoMode      ContractIsolatedMarginTradingSettings
 	GreeksType     GreekType
 	Level          string
 	LevelTmp       string
+	CtIsoMode      ContractIsolatedMarginTradingSettings
 	MgnIsoMode     MgnIsoMode
-	PosMode        PositionMode
 	SpotOffsetType ujson.Int64
-	Uid            string
-	Label          string
 	RoleType       ujson.Int64
 	SpotRoleType   ujson.Int64
 	OpAuth         ujson.Int64
 	KycLv          ujson.Int64
+	Label          string
 	Ip             string
 	Perm           string
-	MainUid        string
 }
 
 func (o *Client) GetAccountConfiguration() Response[[]AccountConf] {

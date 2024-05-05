@@ -2,6 +2,28 @@ package okxv5
 
 import "github.com/msw-x/moon/ujson"
 
+// Get the invitee's detail
+// https://www.okx.com/docs-v5/en/#affiliate-rest-api
+
+type GetInviteesDetail struct {
+	Uid string `url:"uid,omitempty"`
+}
+
+type InviteesOverview struct {
+	InviteeLv         ujson.Float64
+	JoinTime          ujson.TimeMs
+	InviteeRebateRate ujson.Float64
+	TotalCommission   ujson.Float64
+}
+
+func (o *Client) GetInvitees(v GetInviteesDetail) Response[InviteesOverview] {
+	return v.Do(o)
+}
+
+func (o GetInviteesDetail) Do(c *Client) Response[InviteesOverview] {
+	return Get(c, "affiliate/invitee/detail", o, forward[InviteesOverview])
+}
+
 // Get Balance
 // https://www.okx.com/docs-v5/en/#trading-account-rest-api-get-balance
 
