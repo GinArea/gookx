@@ -99,11 +99,10 @@ func (o *WsPublic) onTopic(data []byte) error {
 	return o.subscriptions.processTopic(data)
 }
 
-func (o *WsPublic) OrderBook(symbol string, bookType OrderbookType) *Executor[[]Orderbook] {
-
+func (o *WsPublic) OrderBook(symbol string, bookType OrderbookType) *Executor[[]WsOrderbook] {
 	args := SubscriptionArgs{
 		Channel: string(bookType),
 		InstId:  symbol,
 	}
-	return NewExecutor[[]Orderbook](args, o.subscriptions)
+	return NewExecutor[[]WsOrderbook](args, o.subscriptions)
 }

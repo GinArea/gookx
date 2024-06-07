@@ -56,6 +56,15 @@ type Trades struct {
 	TradeId ujson.Int64
 }
 
+// struct for websocket orderbook
+// https://www.okx.com/docs-v5/en/#order-book-trading-market-data-ws-order-book-channel
+type WsOrderbook struct {
+	Asks  [][]ujson.Float64 `json:"asks"`
+	Bids  [][]ujson.Float64 `json:"bids"`
+	Ts    ujson.Int64       `json:"ts"`
+	SeqId ujson.Int64       `json:"seqId"`
+}
+
 /*
 {
    "Arg":{
