@@ -106,3 +106,26 @@ func (o *Client) GetMarket(mq MarketQuery) Response[[]Market] {
 func (mq MarketQuery) Do(c *Client) Response[[]Market] {
 	return GetPub(c.market(), "ticker", mq, forward[[]Market])
 }
+
+// GET / Order book
+// Retrieve order book of the instrument.
+// https://www.okx.com/docs-v5/en/#order-book-trading-market-data-get-order-book
+type GetOrderbook struct {
+	InstId string
+	Size   int `url:"sz,omitempty"`
+}
+
+type Orderbook struct {
+	Asks  [][]ujson.Float64 `json:"asks"`
+	Bids  [][]ujson.Float64 `json:"bids"`
+	Ts    ujson.Int64       `json:"ts"`
+	SeqId ujson.Int64       `json:"seqId"`
+}
+
+func (o GetOrderbook) Do(c *Client) Response[[]Orderbook] {
+	return GetPub(c.market(), "books", o, forward[[]Orderbook])
+}
+
+func (o *Client) GetOrderbook(v GetOrderbook) Response[[]Orderbook] {
+	return v.Do(o)
+}
