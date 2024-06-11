@@ -147,7 +147,7 @@ type TradesHistory struct {
 	Size    ujson.Float64 `json:"sz"`
 	Price   ujson.Float64 `json:"px"`
 	TradeId string
-	Ts      string
+	Ts      ujson.TimeMs
 }
 
 func (o GetTradesHistory) Do(c *Client) Response[[]TradesHistory] {
