@@ -129,3 +129,31 @@ func (o GetOrderbook) Do(c *Client) Response[[]Orderbook] {
 func (o *Client) GetOrderbook(v GetOrderbook) Response[[]Orderbook] {
 	return v.Do(o)
 }
+
+// GET / Trades history
+// Retrieve the recent transactions of an instrument from the last 3 months with pagination.
+// https://www.okx.com/docs-v5/en/#order-book-trading-market-data-get-trades-history
+type GetTradesHistory struct {
+	InstId string
+	Type   int    `url:",omitempty"`
+	After  string `url:",omitempty"`
+	Before string `url:",omitempty"`
+	Limit  int    `url:",omitempty"`
+}
+
+type TradesHistory struct {
+	InstId  string
+	Side    Side
+	Size    ujson.Float64 `json:"sz"`
+	Price   ujson.Float64 `json:"px"`
+	TradeId string
+	Ts      string
+}
+
+func (o GetTradesHistory) Do(c *Client) Response[[]TradesHistory] {
+	return GetPub(c.market(), "history-trades", o, forward[[]TradesHistory])
+}
+
+func (o *Client) GetTradesHistory(v GetTradesHistory) Response[[]TradesHistory] {
+	return v.Do(o)
+}
