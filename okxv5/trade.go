@@ -7,6 +7,7 @@ import "github.com/msw-x/moon/ujson"
 type PlaceOrder struct {
 	InstId     string
 	TdMode     TradeMode
+	Ccy        string `json:",omitempty"`
 	Side       Side
 	OrdType    OrderType
 	Sz         float64
