@@ -61,20 +61,16 @@ func req[R, T any](c *Client, method string, path string, request any, transform
 	h := perf.Do()
 	if h.Error == nil {
 		r.StatusCode = h.StatusCode
-		if h.StatusCode == http.StatusOK ||
-			h.StatusCode == http.StatusNotFound ||
-			h.StatusCode == http.StatusUnauthorized ||
-			h.StatusCode == http.StatusForbidden {
-			// processing only those http codes where json is exactly in the response body
-			if h.BodyExists() {
-				raw := new(response[R])
-				r.Error = h.Json(raw)
+		if h.BodyExists() {
+			raw := new(response[R])
+			r.Error = h.Json(raw)
+			if r.Ok() {
+				r.Error = raw.Error()
 				if r.Ok() {
-					r.Error = raw.Error()
-					if r.Ok() {
-						r.Data, r.Error = transform(raw.Data)
-					}
+					r.Data, r.Error = transform(raw.Data)
 				}
+			} else {
+				r.Error = errors.New(ufmt.Join(h.Status))
 			}
 		} else {
 			r.Error = errors.New(ufmt.Join(h.Status))
