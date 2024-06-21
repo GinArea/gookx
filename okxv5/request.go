@@ -63,13 +63,15 @@ func req[R, T any](c *Client, method string, path string, request any, transform
 		r.StatusCode = h.StatusCode
 		if h.BodyExists() {
 			raw := new(response[R])
-			r.Error = h.Json(raw)
+			// check that the server response is json
+			r.Error = h.Json(raw) //json parsing
 			if r.Ok() {
-				r.Error = raw.Error()
+				r.Error = raw.Error() // returns error if response code not in (0,1)
 				if r.Ok() {
 					r.Data, r.Error = transform(raw.Data)
 				}
 			} else {
+				// for example 502 Bad Gateway (html/xml)
 				r.Error = errors.New(ufmt.Join(h.Status))
 			}
 		} else {
