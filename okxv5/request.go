@@ -1,9 +1,11 @@
 package okxv5
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
+	"github.com/msw-x/moon/ufmt"
 	"github.com/msw-x/moon/uhttp"
 )
 
@@ -59,15 +61,22 @@ func req[R, T any](c *Client, method string, path string, request any, transform
 	h := perf.Do()
 	if h.Error == nil {
 		r.StatusCode = h.StatusCode
-		// purposefully do not filter by any errors, because according to the documentation, the exchange can return a variety of server responses
-		// if h.StatusCode = http.StatusOK || ...
-		if h.BodyExists() {
-			raw := new(response[R])
-			h.Json(raw)
-			r.Error = raw.Error()
-			if r.Ok() {
-				r.Data, r.Error = transform(raw.Data)
+		if h.StatusCode == http.StatusOK ||
+			h.StatusCode == http.StatusNotFound ||
+			h.StatusCode == http.StatusUnauthorized ||
+			h.StatusCode == http.StatusForbidden {
+			if h.BodyExists() {
+				raw := new(response[R])
+				r.Error = h.Json(raw)
+				if r.Ok() {
+					r.Error = raw.Error()
+					if r.Ok() {
+						r.Data, r.Error = transform(raw.Data)
+					}
+				}
 			}
+		} else {
+			r.Error = errors.New(ufmt.Join(h.Status))
 		}
 		if sign {
 			r.SetErrorIfNil(h.HeaderTo(&r.Limit))
