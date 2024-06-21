@@ -65,6 +65,7 @@ func req[R, T any](c *Client, method string, path string, request any, transform
 			h.StatusCode == http.StatusNotFound ||
 			h.StatusCode == http.StatusUnauthorized ||
 			h.StatusCode == http.StatusForbidden {
+			// processing only those http codes where json is exactly in the response body
 			if h.BodyExists() {
 				raw := new(response[R])
 				r.Error = h.Json(raw)
