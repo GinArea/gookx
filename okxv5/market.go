@@ -33,6 +33,7 @@ type Instruments struct {
 	MaxIcebergSz ujson.Float64
 	MaxLmtSz     ujson.Float64
 	MaxMktSz     ujson.Float64
+	MaxMktAmt    ujson.Float64
 	MaxStopSz    ujson.Float64
 	MaxTriggerSz ujson.Float64
 	MaxTwapSz    ujson.Float64
