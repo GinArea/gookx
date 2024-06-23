@@ -101,3 +101,7 @@ func (o *Error) InsufficientBalance() bool {
 	}
 	return slices.Contains(codes, o.Code)
 }
+
+func (o *Error) OrderNotExist() bool {
+	return o.Code == 51603
+}
