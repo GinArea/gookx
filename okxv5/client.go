@@ -87,4 +87,4 @@ func (o *Client) market() *Client {
 	return o.Copy().WithAppendPath("market")
 }
 
-type OnTransportError func(err error, statusCode int, attempt int) bool
+type OnTransportError func(err error, method string, statusCode int, attempt int) bool
