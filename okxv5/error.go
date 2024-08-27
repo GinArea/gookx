@@ -78,6 +78,7 @@ func (o *Error) Timeout() bool {
 	codes := []ujson.Int64{
 		50001, // Service temporarily unavailable. Please try again later
 		50004, // API endpoint request timeout (does not mean that the request was successful or failed, please check the request result).
+		50026, // System error, please try again later.
 		52912, // Server timeout
 	}
 	return slices.Contains(codes, o.Code)
