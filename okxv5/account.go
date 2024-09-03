@@ -17,12 +17,12 @@ type InviteesOverview struct {
 	TotalCommission   ujson.Float64
 }
 
-func (o *Client) GetInvitees(uid string) Response[InviteesOverview] {
+func (o *Client) GetInvitees(uid string) Response[[]InviteesOverview] {
 	return GetInviteesDetail{Uid: uid}.Do(o)
 }
 
-func (o GetInviteesDetail) Do(c *Client) Response[InviteesOverview] {
-	return Get(c, "affiliate/invitee/detail", o, forward[InviteesOverview])
+func (o GetInviteesDetail) Do(c *Client) Response[[]InviteesOverview] {
+	return Get(c, "affiliate/invitee/detail", o, forward[[]InviteesOverview])
 }
 
 // Get Balance
