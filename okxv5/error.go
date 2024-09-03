@@ -106,3 +106,7 @@ func (o *Error) InsufficientBalance() bool {
 func (o *Error) OrderNotExist() bool {
 	return o.Code == 51603
 }
+
+func (o *Error) UserIsNotYourInvitee() bool {
+	return o.Code == 51621
+}

@@ -10,14 +10,15 @@ type GetInviteesDetail struct {
 }
 
 type InviteesOverview struct {
+	AffiliateCode     string
 	InviteeLv         ujson.Float64
 	JoinTime          ujson.TimeMs
 	InviteeRebateRate ujson.Float64
 	TotalCommission   ujson.Float64
 }
 
-func (o *Client) GetInvitees(v GetInviteesDetail) Response[InviteesOverview] {
-	return v.Do(o)
+func (o *Client) GetInvitees(uid string) Response[InviteesOverview] {
+	return GetInviteesDetail{Uid: uid}.Do(o)
 }
 
 func (o GetInviteesDetail) Do(c *Client) Response[InviteesOverview] {
