@@ -140,6 +140,11 @@ func (o *WsClient) onMessage(messageType int, data []byte) {
 			if e == nil {
 				log.Error(string(out))
 			}
+			if r.Code == "50100" {
+				// {"op":"","event":"error","code":"50100","msg":"API frozen, please contact customer service.","connId":"9dc875db","args":null}
+				// TODO: recv: websocket: close 4001: Login failed.
+				o.c.Cancel()
+			}
 		} else {
 			if r.Valid() {
 				if o.onResponce != nil {
