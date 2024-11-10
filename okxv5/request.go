@@ -63,6 +63,7 @@ func req[R, T any](c *Client, method string, path string, request any, transform
 		r.StatusCode = h.StatusCode
 		if h.BodyExists() && r.StatusCode != http.StatusServiceUnavailable {
 			// 503 Service Unavailable response-body: {"message":"name resolution failed"}
+			// 503 Service Unavailable response-body: {"code":"50001","data":[],"inTime":"1731058879657762","msg":"Service temporarily unavailable. Please try again later ","outTime":"1731058879658004"}
 			raw := new(response[R])
 			// check that the server response is json
 			r.Error = h.Json(raw) //json parsing
