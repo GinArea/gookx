@@ -61,7 +61,7 @@ func req[R, T any](c *Client, method string, path string, request any, transform
 	h := perf.Do()
 	if h.Error == nil {
 		r.StatusCode = h.StatusCode
-		if h.BodyExists() && r.StatusCode != http.StatusServiceUnavailable && r.StatusCode != http.StatusGatewayTimeout {
+		if h.BodyExists() && r.StatusCode != http.StatusBadGateway && r.StatusCode != http.StatusServiceUnavailable && r.StatusCode != http.StatusGatewayTimeout {
 			// 503 Service Unavailable response-body: {"message":"name resolution failed"}
 			// 503 Service Unavailable response-body: {"code":"50001","data":[],"inTime":"1731058879657762","msg":"Service temporarily unavailable. Please try again later ","outTime":"1731058879658004"}
 			// 504 Gateway Timeout response-body: {"message":"The upstream server is timing out", "error_id":"dd797d106886196dad573f3de12f0300"}
@@ -74,7 +74,6 @@ func req[R, T any](c *Client, method string, path string, request any, transform
 					r.Data, r.Error = transform(raw.Data)
 				}
 			} else {
-				// for example 502 Bad Gateway (html/xml)
 				r.Error = errors.New(ufmt.Join(h.Status))
 			}
 		} else {
