@@ -80,6 +80,7 @@ func (o *Error) Timeout() bool {
 		50004, // API endpoint request timeout (does not mean that the request was successful or failed, please check the request result).
 		50026, // System error, please try again later.
 		52912, // Server timeout
+		51006, // Order price is not within the price limit (max buy price: {param0} min sell price: {param1})
 	}
 	return slices.Contains(codes, o.Code)
 }
