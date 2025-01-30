@@ -1,6 +1,8 @@
 package okxv5
 
 import (
+	"time"
+
 	"github.com/msw-x/moon/ulog"
 	"github.com/msw-x/moon/uws"
 )
@@ -44,6 +46,11 @@ func (o *WsPublic) WithLogRequest(enable bool) *WsPublic {
 
 func (o *WsPublic) WithLogResponse(enable bool) *WsPublic {
 	o.c.WithLogResponse(enable)
+	return o
+}
+
+func (o *WsPublic) WithOnDialDelay(f func() time.Duration) *WsPublic {
+	o.c.WithOnDialDelay(f)
 	return o
 }
 
