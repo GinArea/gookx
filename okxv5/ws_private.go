@@ -2,6 +2,7 @@ package okxv5
 
 import (
 	"strings"
+	"time"
 
 	"github.com/msw-x/moon/ufmt"
 	"github.com/msw-x/moon/ulog"
@@ -52,6 +53,11 @@ func (o *WsPrivate) WithLogRequest(enable bool) *WsPrivate {
 
 func (o *WsPrivate) WithLogResponse(enable bool) *WsPrivate {
 	o.c.WithLogResponse(enable)
+	return o
+}
+
+func (o *WsPrivate) WithOnDialDelay(f func() time.Duration) *WsPrivate {
+	o.c.WithOnDialDelay(f)
 	return o
 }
 

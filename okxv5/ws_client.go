@@ -3,6 +3,7 @@ package okxv5
 import (
 	"bytes"
 	"encoding/json"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/msw-x/moon/ulog"
@@ -58,6 +59,11 @@ func (o *WsClient) WithLogRequest(enable bool) *WsClient {
 func (o *WsClient) WithLogResponse(enable bool) *WsClient {
 	o.Transport().LogRecv.Size = enable
 	o.Transport().LogRecv.Data = enable
+	return o
+}
+
+func (o *WsClient) WithOnDialDelay(f func() time.Duration) *WsClient {
+	o.c.WithOnDialDelay(f)
 	return o
 }
 
