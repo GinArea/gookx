@@ -81,6 +81,10 @@ func (o *WsPublic) Run() {
 	o.c.Run()
 }
 
+func (o *WsPublic) Running() bool {
+	return o.c.Running()
+}
+
 func (o *WsPublic) Connected() bool {
 	return o.c.Connected()
 }

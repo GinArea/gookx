@@ -99,6 +99,10 @@ func (o *WsPrivate) Run() {
 	o.c.Run()
 }
 
+func (o *WsPrivate) Running() bool {
+	return o.c.Running()
+}
+
 func (o *WsPrivate) Connected() bool {
 	return o.c.Connected()
 }

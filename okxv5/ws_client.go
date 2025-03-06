@@ -98,6 +98,10 @@ func (o *WsClient) Run() {
 	o.c.Run()
 }
 
+func (o *WsClient) Running() bool {
+	return o.c.Running()
+}
+
 func (o *WsClient) Connected() bool {
 	return o.c.Connected()
 }
