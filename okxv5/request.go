@@ -73,8 +73,6 @@ func req[R, T any](c *Client, method string, path string, request any, transform
 				if r.Ok() {
 					r.Data, r.Error = transform(raw.Data)
 				}
-			} else {
-				r.Error = errors.New(ufmt.Join(h.Status))
 			}
 		} else {
 			r.Error = errors.New(ufmt.Join(h.Status))
