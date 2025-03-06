@@ -16,8 +16,8 @@ type WsPublic struct {
 func NewWsPublic() *WsPublic {
 	o := new(WsPublic)
 	o.c = NewWsClient()
-	o.subscriptions = NewSubscriptions(o)
 	o.c.WithPath("v5/public")
+	o.subscriptions = NewSubscriptions(o)
 	return o
 }
 
@@ -112,4 +112,16 @@ func (o *WsPublic) OrderBook(symbol string, bookType OrderbookType) *Executor[[]
 		InstId:  symbol,
 	}
 	return NewExecutor[[]WsOrderbook](args, o.subscriptions)
+}
+
+func (o *WsPublic) Business() {
+	o.c.WithPath("v5/business")
+}
+
+func (o *WsPublic) PriceCandle(symbol string, candle MarkPriceCandle) *Executor[[]RawCandle] {
+	args := SubscriptionArgs{
+		Channel: string(candle),
+		InstId:  symbol,
+	}
+	return NewExecutor[[]RawCandle](args, o.subscriptions)
 }

@@ -1,6 +1,7 @@
 package okxv5
 
 import (
+	"github.com/msw-x/moon/parse"
 	"github.com/msw-x/moon/ujson"
 )
 
@@ -156,5 +157,70 @@ func (o GetTradesHistory) Do(c *Client) Response[[]TradesHistory] {
 }
 
 func (o *Client) GetTradesHistory(v GetTradesHistory) Response[[]TradesHistory] {
+	return v.Do(o)
+}
+
+// GET / Mark price candlesticks history
+// Retrieve the candlestick charts of mark price from recent years.
+// https://www.okx.com/docs-v5/en/#public-data-rest-api-get-mark-price-candlesticks-history
+type GetCandle struct {
+	InstId string
+	After  string `url:",omitempty"`
+	Before string `url:",omitempty"`
+	Bar    Bar    `url:",omitempty"`
+	Limit  int    `url:",omitempty"`
+}
+
+type Candle struct {
+	Ts      int64   // Opening time of the candlestick, Unix timestamp format in milliseconds
+	Open    float64 // Open price
+	High    float64 // Highest price
+	Low     float64 // Lowest price
+	Close   float64 // Close price
+	Confirm bool    // The state of candlesticks. 0 represents that it is uncompleted, 1 represents that it is completed.
+}
+
+type RawCandle [6]string
+
+func (o RawCandle) Candle() (v Candle, err error) {
+	v.Ts, err = parse.Int64(o[0])
+	if err != nil {
+		return
+	}
+	v.Open, err = parse.Float64(o[1])
+	if err != nil {
+		return
+	}
+	v.High, err = parse.Float64(o[2])
+	if err != nil {
+		return
+	}
+	v.Low, err = parse.Float64(o[3])
+	if err != nil {
+		return
+	}
+	v.Close, err = parse.Float64(o[4])
+	if err != nil {
+		return
+	}
+	v.Confirm = o[5] == "1"
+	return
+}
+
+func (o GetCandle) Do(c *Client) Response[[]Candle] {
+	return GetPub(c.market(), "history-mark-price-candles", o, func(l []RawCandle) (r []Candle, err error) {
+		for _, v := range l {
+			var s Candle
+			s, err = v.Candle()
+			if err != nil {
+				break
+			}
+			r = append(r, s)
+		}
+		return
+	})
+}
+
+func (o *Client) GetCandle(v GetCandle) Response[[]Candle] {
 	return v.Do(o)
 }
