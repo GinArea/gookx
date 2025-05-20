@@ -167,10 +167,17 @@ const (
 	Bar3Mutc  Bar = "3Mutc"
 )
 
+// candle (https://www.okx.com/docs-v5/en/#order-book-trading-market-data-ws-candlesticks-channel)
+type TopicCandle string
+
+func (o Bar) TopicCandle() TopicCandle {
+	return TopicCandle("candle" + o)
+}
+
 // mark-price-candle (https://www.okx.com/docs-v5/en/#public-data-websocket-mark-price-candlesticks-channel)
 
-type MarkPriceCandle string
+type TopicMarkPriceCandle string
 
-func (o Bar) MarkPriceCandle() MarkPriceCandle {
-	return MarkPriceCandle("mark-price-candle" + o)
+func (o Bar) TopicMarkPriceCandle() TopicMarkPriceCandle {
+	return TopicMarkPriceCandle("mark-price-candle" + o)
 }

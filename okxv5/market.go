@@ -163,7 +163,7 @@ func (o *Client) GetTradesHistory(v GetTradesHistory) Response[[]TradesHistory] 
 // GET / Mark price candlesticks history
 // Retrieve the candlestick charts of mark price from recent years.
 // https://www.okx.com/docs-v5/en/#public-data-rest-api-get-mark-price-candlesticks-history
-type GetCandle struct {
+type GetMarkPriceCandle struct {
 	InstId string
 	After  string `url:",omitempty"`
 	Before string `url:",omitempty"`
@@ -171,7 +171,7 @@ type GetCandle struct {
 	Limit  int    `url:",omitempty"`
 }
 
-type Candle struct {
+type MarkPriceCandle struct {
 	Ts      int64   // Opening time of the candlestick, Unix timestamp format in milliseconds
 	Open    float64 // Open price
 	High    float64 // Highest price
@@ -180,9 +180,9 @@ type Candle struct {
 	Confirm bool    // The state of candlesticks. 0 represents that it is uncompleted, 1 represents that it is completed.
 }
 
-type RawCandle [6]string
+type RawMarkPriceCandle [6]string
 
-func (o RawCandle) Candle() (v Candle, err error) {
+func (o RawMarkPriceCandle) MarkPriceCandle() (v MarkPriceCandle, err error) {
 	v.Ts, err = parse.Int64(o[0])
 	if err != nil {
 		return
@@ -207,8 +207,88 @@ func (o RawCandle) Candle() (v Candle, err error) {
 	return
 }
 
+func (o GetMarkPriceCandle) Do(c *Client) Response[[]MarkPriceCandle] {
+	return GetPub(c.market(), "history-mark-price-candles", o, func(l []RawMarkPriceCandle) (r []MarkPriceCandle, err error) {
+		for _, v := range l {
+			var s MarkPriceCandle
+			s, err = v.MarkPriceCandle()
+			if err != nil {
+				break
+			}
+			r = append(r, s)
+		}
+		return
+	})
+}
+
+func (o *Client) GetMarkPriceCandle(v GetMarkPriceCandle) Response[[]MarkPriceCandle] {
+	return v.Do(o)
+}
+
+// GET / Candlesticks
+// Retrieve the candlestick charts. This endpoint can retrieve the latest 1,440 data entries. Charts are returned in groups based on the requested bar.
+// https://www.okx.com/docs-v5/en/#order-book-trading-market-data-get-candlesticks
+type GetCandle struct {
+	InstId string
+	After  string `url:",omitempty"`
+	Before string `url:",omitempty"`
+	Bar    Bar    `url:",omitempty"`
+	Limit  int    `url:",omitempty"`
+}
+
+type Candle struct {
+	Ts          int64   // Opening time of the candlestick, Unix timestamp format in milliseconds
+	Open        float64 // Open price
+	High        float64 // Highest price
+	Low         float64 // Lowest price
+	Close       float64 // Close price
+	Volume      float64 // Trading volume, with a unit of contract
+	VolCcy      float64 // Trading volume, with a unit of currency
+	volCcyQuote float64 // Trading volume, the value is the quantity in quote currency
+	Confirm     bool    // The state of candlesticks. 0 represents that it is uncompleted, 1 represents that it is completed.
+}
+
+type RawCandle [9]string
+
+func (o RawCandle) Candle() (v Candle, err error) {
+	v.Ts, err = parse.Int64(o[0])
+	if err != nil {
+		return
+	}
+	v.Open, err = parse.Float64(o[1])
+	if err != nil {
+		return
+	}
+	v.High, err = parse.Float64(o[2])
+	if err != nil {
+		return
+	}
+	v.Low, err = parse.Float64(o[3])
+	if err != nil {
+		return
+	}
+	v.Close, err = parse.Float64(o[4])
+	if err != nil {
+		return
+	}
+	v.Volume, err = parse.Float64(o[5])
+	if err != nil {
+		return
+	}
+	v.VolCcy, err = parse.Float64(o[6])
+	if err != nil {
+		return
+	}
+	v.volCcyQuote, err = parse.Float64(o[7])
+	if err != nil {
+		return
+	}
+	v.Confirm = o[8] == "1"
+	return
+}
+
 func (o GetCandle) Do(c *Client) Response[[]Candle] {
-	return GetPub(c.market(), "history-mark-price-candles", o, func(l []RawCandle) (r []Candle, err error) {
+	return GetPub(c.market(), "candles", o, func(l []RawCandle) (r []Candle, err error) {
 		for _, v := range l {
 			var s Candle
 			s, err = v.Candle()

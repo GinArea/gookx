@@ -122,10 +122,18 @@ func (o *WsPublic) Business() {
 	o.c.WithPath("v5/business")
 }
 
-func (o *WsPublic) PriceCandle(symbol string, candle MarkPriceCandle) *Executor[[]RawCandle] {
+func (o *WsPublic) Candle(symbol string, candle TopicCandle) *Executor[[]RawCandle] {
 	args := SubscriptionArgs{
 		Channel: string(candle),
 		InstId:  symbol,
 	}
 	return NewExecutor[[]RawCandle](args, o.subscriptions)
+}
+
+func (o *WsPublic) PriceCandle(symbol string, candle TopicMarkPriceCandle) *Executor[[]RawMarkPriceCandle] {
+	args := SubscriptionArgs{
+		Channel: string(candle),
+		InstId:  symbol,
+	}
+	return NewExecutor[[]RawMarkPriceCandle](args, o.subscriptions)
 }
