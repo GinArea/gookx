@@ -37,7 +37,11 @@ func (o WsResponse) Log(log *ulog.Log) {
 		log.Info("unsubscribe: success")
 	default:
 		if o.Operation == "" {
-			log.Errorf("invalid response: %+v", o)
+			if strings.EqualFold(o.Event, "notice") && o.Code == "64008" {
+				log.Info(o.Message)
+			} else {
+				log.Errorf("invalid response: %+v", o)
+			}
 		} else {
 			log.Error("invalid response operation:", o.Operation)
 		}
