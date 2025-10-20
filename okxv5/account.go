@@ -83,3 +83,34 @@ func (o *Client) GetBalance(v GetBalance) Response[[]BalanceOverview] {
 func (o GetBalance) Do(c *Client) Response[[]BalanceOverview] {
 	return Get(c, "account/balance", o, forward[[]BalanceOverview])
 }
+
+// Get deposit address
+// https://www.okx.com/docs-v5/en/#funding-account-rest-api-get-deposit-address
+
+type DepositAddress struct {
+	Addr         string
+	Tag          string // This will not be returned if the currency does not require a tag for deposit
+	Memo         string // This will not be returned if the currency does not require a memo for deposit
+	PmtId        string // This will not be returned if the currency does not require a payment_id for deposit
+	AddrEx       any
+	Ccy          string
+	Chain        string
+	To           string
+	VerifiedName string
+	Selected     bool
+	CtAddr       string
+}
+
+type DepositAddressRequest struct {
+	Ccy string
+}
+
+func (o *Client) GetDepositAddress(ccy string) Response[[]DepositAddress] {
+	return DepositAddressRequest{
+		Ccy: ccy,
+	}.Do(o)
+}
+
+func (o DepositAddressRequest) Do(c *Client) Response[[]DepositAddress] {
+	return Get(c, "asset/deposit-address", o, forward[[]DepositAddress])
+}
