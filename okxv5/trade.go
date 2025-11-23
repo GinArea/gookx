@@ -73,6 +73,7 @@ type RetrievedOrderDetails struct {
 	StpMode            string
 	Lever              ujson.Float64
 	AttachAlgoClOrdId  string
+	LastPx             ujson.Float64
 	TpTriggerPx        ujson.Float64
 	TpTriggerPxType    TriggerPriceType
 	TpOrdPx            ujson.Float64
