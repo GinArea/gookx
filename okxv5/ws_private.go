@@ -94,10 +94,6 @@ func (o *WsPrivate) Run() {
 			o.onDisconnected()
 		}
 	})
-	o.c.WithOnDialError(func(e error) bool {
-		// add delay for reconnect
-		return false
-	})
 	o.c.WithOnResponse(o.onResponse)
 	o.c.WithOnTopic(o.onTopic)
 	o.c.Run()
