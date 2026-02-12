@@ -13,10 +13,14 @@ type WsPrivate struct {
 	c              *WsClient
 	s              *Sign
 	ready          bool
+	authSent       bool // true after login request sent, false after login response received
 	onReady        func()
 	onConnected    func()
 	onDisconnected func()
 	subscriptions  *Subscriptions
+	// onLoginFailed is called when OKX rejects login (revoked/invalid API keys).
+	// Cancel() is called automatically before this callback to prevent infinite reconnect.
+	onLoginFailed func()
 }
 
 func NewWsPrivate(key, secret, password string) *WsPrivate {
@@ -81,6 +85,11 @@ func (o *WsPrivate) WithOnDisconnected(f func()) *WsPrivate {
 	return o
 }
 
+func (o *WsPrivate) WithOnLoginFailed(f func()) *WsPrivate {
+	o.onLoginFailed = f
+	return o
+}
+
 func (o *WsPrivate) Run() {
 	o.c.WithOnConnected(func() {
 		if o.onConnected != nil {
@@ -89,7 +98,17 @@ func (o *WsPrivate) Run() {
 		o.auth()
 	})
 	o.c.WithOnDisconnected(func() {
+		// OKX may close the connection with close frame 4001 ("Login failed") without
+		// sending a login response JSON. In that case authSent is still true and ready
+		// is still false. Cancel() prevents infinite reconnect loop.
+		if o.authSent && !o.ready {
+			o.c.c.Cancel()
+			if o.onLoginFailed != nil {
+				o.onLoginFailed()
+			}
+		}
 		o.ready = false
+		o.authSent = false
 		if o.onDisconnected != nil {
 			o.onDisconnected()
 		}
@@ -112,6 +131,7 @@ func (o *WsPrivate) Ready() bool {
 }
 
 func (o *WsPrivate) auth() {
+	o.authSent = true
 	o.c.Send(WsRequestAuth{
 		Operation: "login",
 		Args:      o.s.WebSocket(),
@@ -129,6 +149,7 @@ func (o *WsPrivate) unsubscribe(topicArgs SubscriptionArgs) {
 func (o *WsPrivate) onResponse(r WsResponse) error {
 	log := o.c.Log()
 	if r.Event == "login" {
+		o.authSent = false // login response received, clear the flag
 		success := strings.EqualFold(r.Code, "0")
 		log.Info("auth:", ufmt.SuccessFailure(success))
 		if success {
@@ -137,6 +158,14 @@ func (o *WsPrivate) onResponse(r WsResponse) error {
 				o.onReady()
 			}
 			o.subscriptions.subscribeAll()
+		} else {
+			// Login rejected (e.g. code 60009 — invalid API key).
+			// Cancel() stops reconnection; the subsequent close frame 4001 from OKX
+			// will be handled gracefully since the client is already cancelled.
+			o.c.c.Cancel()
+			if o.onLoginFailed != nil {
+				o.onLoginFailed()
+			}
 		}
 	} else {
 		r.Log(log)

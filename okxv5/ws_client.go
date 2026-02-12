@@ -154,7 +154,7 @@ func (o *WsClient) onMessage(messageType int, data []byte) {
 			if e == nil {
 				log.Error(string(out))
 			}
-			if r.Code == "50100" || r.Code == "50110" || r.Code == "4001" {
+			if r.Code == "50100" || r.Code == "50110" {
 				// {"op":"","event":"error","code":"50100","msg":"API frozen, please contact customer service.","connId":"9dc875db","args":null}
 				// {"op":"","event":"error","code":"50110","msg":"Your IP ... is not in linking trusted IP addresses.","connId":"a2992b6f","args":null}
 				// TODO: recv: websocket: close 4001: Login failed.
