@@ -95,10 +95,6 @@ func (o *WsClient) WithOnTopic(f func([]byte) error) *WsClient {
 func (o *WsClient) Run() {
 	o.c.WithOnPing(o.ping)
 	o.c.WithOnMessage(o.onMessage)
-	o.c.WithOnDialError(func(e error) bool {
-		// add delay for reconnect
-		return false
-	})
 	o.c.Run()
 }
 
