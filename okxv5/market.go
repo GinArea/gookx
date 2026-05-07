@@ -304,3 +304,32 @@ func (o GetCandle) Do(c *Client) Response[[]Candle] {
 func (o *Client) GetCandle(v GetCandle) Response[[]Candle] {
 	return v.Do(o)
 }
+
+// GET / Candlesticks history
+// Retrieve history candlestick charts from recent years (top currencies only, e.g. BTC-USDT).
+// https://www.okx.com/docs-v5/en/#order-book-trading-market-data-get-candlesticks-history
+type GetCandleHistory struct {
+	InstId string
+	After  string `url:",omitempty"`
+	Before string `url:",omitempty"`
+	Bar    Bar    `url:",omitempty"`
+	Limit  int    `url:",omitempty"` // max 100, default 100 (differs from GetCandle which allows up to 300)
+}
+
+func (o GetCandleHistory) Do(c *Client) Response[[]Candle] {
+	return GetPub(c.market(), "history-candles", o, func(l []RawCandle) (r []Candle, err error) {
+		for _, v := range l {
+			var s Candle
+			s, err = v.Candle()
+			if err != nil {
+				break
+			}
+			r = append(r, s)
+		}
+		return
+	})
+}
+
+func (o *Client) GetCandleHistory(v GetCandleHistory) Response[[]Candle] {
+	return v.Do(o)
+}
